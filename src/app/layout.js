@@ -1,5 +1,6 @@
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/providers/theme-provider";
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -32,8 +33,17 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en"    >
-      <body className={`${dmSans.className} antialiased`}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${dmSans.className} antialiased`} suppressHydrationWarning>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
