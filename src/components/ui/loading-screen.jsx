@@ -39,7 +39,7 @@ export default function LoadingScreen({ progress }) {
       variants={slideUp}
       initial="initial"
       exit="exit"
-      className="fixed inset-0 z-50 flex flex-col justify-between bg-[#000000] text-[#E5E5E5]"
+      className="fixed inset-0 z-99999999 flex flex-col justify-between bg-[#000000] text-[#E5E5E5]"
     >
       <div className="flex w-full justify-between p-8 text-xs font-mono tracking-widest uppercase opacity-40">
         <span>Lunarcent Engine</span>

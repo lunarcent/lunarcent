@@ -86,6 +86,9 @@ export default function MoonOrchestrator({ scrollYProgress, onLoadProgress }) {
   const { progress, active, loaded, total } = useProgress();
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  
+  const directions = ["bg-linear-to-t", "bg-linear-to-r", "bg-linear-to-l", "bg-linear-to-r"];
 
   useEffect(() => {
     setMounted(true);
@@ -93,8 +96,6 @@ export default function MoonOrchestrator({ scrollYProgress, onLoadProgress }) {
 
   useEffect(() => {
     if (onLoadProgress) {
-      // Sometimes due to Next.js dynamic imports + ThreeJS cache, the models finish 
-      // instantly before progress reaches 100. This safely overrides it to 100 when finished.
       if (loaded > 0 && loaded === total && !active) {
         onLoadProgress(100);
       } else {
@@ -103,12 +104,51 @@ export default function MoonOrchestrator({ scrollYProgress, onLoadProgress }) {
     }
   }, [progress, active, loaded, total, onLoadProgress]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    
+    const updateGradientDirection = () => {
+      const vhPassed = Math.floor(window.scrollY / window.innerHeight);
+      const index = vhPassed % directions.length;
+      setActiveIndex(index);
+    };
+
+    updateGradientDirection();
+
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateGradientDirection();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", updateGradientDirection);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", updateGradientDirection);
+    };
+  }, [directions.length]);
+
   const isLight = mounted && resolvedTheme === "light";
 
   return (
-    <div className={`fixed inset-0 z-0 pointer-events-none w-full h-full transition-colors duration-700 ${isLight ? "bg-slate-50" : "bg-[#020202]"}`}>
-      <div className={`absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] z-0 transition-opacity duration-700 ${isLight ? "from-amber-200/20 via-slate-100 to-white opcaity-100" : "from-amber-900/10 via-black to-black opacity-100"}`} />
-
+    <div className={`fixed inset-0 -z-10 pointer-events-none w-full h-full transition-colors duration-700 ${isLight ? "bg-slate-50" : "bg-[#020202]"}`}>
+      <div className="absolute top-0 left-0 z-10 w-full h-full">
+        {directions.map((dir, idx) => (
+          <div
+            key={idx}
+            className={`absolute inset-0 w-full h-screen ${dir} dark:from-black dark:via-black/80 dark:to-transparent transition-opacity duration-700`}
+            style={{ opacity: activeIndex === idx ? 1 : 0 }}
+          />
+        ))}
+      </div>
+      
       <Canvas shadows={{ type: THREE.PCFShadowMap }} dpr={[1, 2]} className="pointer-events-auto">
         <PerspectiveCamera makeDefault position={[0, 0, 15]} fov={50} />
         
