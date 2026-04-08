@@ -6,23 +6,19 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 const Feature = ({ featureData }) => {
   return (
     <section>
-      <div className="lg:py-20 sm:py-16 py-8 w-full h-screen">
+      <div className="lg:py-20 sm:py-16 py-8 w-full h-screen flex justify-center items-center">
         <div className="mx-auto container px-4 sm:px-8">
           <div className="flex flex-col gap-8 md:gap-12">
-            
-            {/* Header Section */}
             <div className="flex flex-col md:flex-row items-center md:items-end justify-center md:justify-between gap-4">
               <div className="flex flex-col gap-4 max-w-full items-center md:items-start text-center md:text-left md:max-w-xl">
                 <Badge
-                  variant="outline"
-                  className="bg-transparent! backdrop-blur-3xl!"
                 >
-                 System capabilities
+                 Capabilities
                 </Badge>
                 <h2 className="text-3xl md:text-5xl font-black tracking-tighter">
                   Architecting the <br/><span className="text-amber-500">Unseen Phases.</span>
                 </h2>
-                <p className="font-normal text-muted-foreground font-mono text-sm tracking-wide">
+                <p className="font-normal dark:text-white/80 text-black/80 font-mono text-sm tracking-wide">
                   We don't build bloated monolithic systems. We engineer the crescent—lean, hyper-focused SaaS and web infrastructure that operates flawlessly in the shadow.
                 </p>
               </div>
@@ -60,13 +56,13 @@ const Feature = ({ featureData }) => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-6">
                 {featureData?.map((value, index) => {
                   return (
-                    <Card key={index} className="py-8 group bg-linear-to-t from-black via-black/50 to-transparent shadow-none backdrop-blur-3xl">
+                    <Card key={index} className="py-8 group shadow-none">
                       <CardContent className="w-full h-full px-8 flex flex-col items-start gap-12 justify-between">
                         <value.icon
-                          className="w-6 h-6 text-zinc-600 group-hover:text-amber-500 transition-colors duration-500"
+                          className="w-6 h-6 dark:text-zinc-600 text-zinc-700 group-hover:text-amber-500 transition-colors duration-500"
                           strokeWidth={1.5}
                         />
-                        <p className="text-sm text-zinc-400 font-normal leading-relaxed">
+                        <p className="text-sm dark:text-zinc-400 text-zinc-600 font-normal leading-relaxed">
                           {value?.content}
                         </p>
                       </CardContent>

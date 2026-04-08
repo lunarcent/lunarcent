@@ -38,7 +38,7 @@ function CrescentMoon({ url, scrollYProgress, isLight }) {
       const zTarget = progress < 0.5 
         ? THREE.MathUtils.lerp(0, -5, progress * 2) 
         : THREE.MathUtils.lerp(-5, 4, (progress - 0.5) * 2);
-      const xTarget = THREE.MathUtils.lerp(0, 3, progress);
+      const xTarget = THREE.MathUtils.lerp(0, -4, progress);
 
       const rotXTarget = THREE.MathUtils.lerp(Math.PI / 2, Math.PI / 2, progress);
       const rotYTarget = THREE.MathUtils.lerp(0, 0, progress);
@@ -138,18 +138,18 @@ export default function MoonOrchestrator({ scrollYProgress, onLoadProgress }) {
   const isLight = mounted && resolvedTheme === "light";
 
   return (
-    <div className={`fixed inset-0 -z-10 pointer-events-none w-full h-full transition-colors duration-700 ${isLight ? "bg-slate-50" : "bg-[#020202]"}`}>
+    <div className={`fixed inset-0 -z-10 pointer-events-none w-full h-full transition-colors duration-700 ${isLight ? "bg-zinc-50" : "bg-[#020202]"}`}>
       <div className="absolute top-0 left-0 z-10 w-full h-full">
         {directions.map((dir, idx) => (
           <div
             key={idx}
-            className={`absolute inset-0 w-full h-screen ${dir} dark:from-black dark:via-black/80 dark:to-transparent transition-opacity duration-700`}
+            className={`absolute inset-0 w-full h-screen ${dir} dark:from-black from-white dark:via-black/90 via-white/90 dark:to-transparent transition-opacity duration-700`}
             style={{ opacity: activeIndex === idx ? 1 : 0 }}
           />
         ))}
       </div>
       
-      <Canvas shadows={{ type: THREE.PCFShadowMap }} dpr={[1, 2]} className="pointer-events-auto">
+      <Canvas shadows={{ type: THREE.PCFShadowMap }} dpr={[1, 2]} className="pointer-events-auto -z-50">
         <PerspectiveCamera makeDefault position={[0, 0, 15]} fov={50} />
         
         <ambientLight intensity={isLight ? 0.9 : 0.5} color="#ffffff" />
